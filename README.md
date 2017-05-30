@@ -9,8 +9,8 @@
 git clone https://github.com/takara9/chatbot-echo-line
 ~~~
 
-LINE BUSINESS CENTER から accessToken, channelSecret を取得して echoback_bot.js に設定します。参考資料(1)
-HTTPSの暗号化通信は、 Bluemix のプラットフォームが変換するので echoback_bot.js から、これに関する部分を削除します。
+* LINE BUSINESS CENTER から accessToken, channelSecret を取得して echoback_bot.js に設定します。参考資料(1)
+* HTTPSの暗号化通信は、 Bluemix のプラットフォームが変換するので echoback_bot.js から、これに関する部分を削除します。
 
 ~~~
 var portno = process.env.PORT || 3000;
@@ -27,14 +27,14 @@ var bot = new LineMsgApi({
 });
 ~~~
 
-Bluemix CLI コマンドをインストールして、Bluemix にログインします。 参考資料(2)
-以下のコマンドを使って、CFアプリとしてデプロイします。 このコマンドは manifest.yml を読み込んでデプロイを実行するのですが、host が同一ドメインに既に存在すると失敗します。その場合は manifest.yml を編集して再実行します。
+* Bluemix CLI コマンドをインストールして、Bluemix にログインします。 参考資料(2)
+* 以下のコマンドを使って、CFアプリとしてデプロイします。 このコマンドは manifest.yml を読み込んでデプロイを実行するのですが、host が同一ドメインに既に存在すると失敗します。その場合は manifest.yml を編集して再実行します。
 
 ~~~
 bx cf push
 ~~~
 
-コマンドが完了したら、Bluemix ポータルのダッシュボードのアプリ名 line-chatbot に、URLが表示されています。このアプリのURLをLINE developer の Message API の Webhook URLに設定して、Verify を実行して Success と表示されれば、準備完了です。
+* コマンドが完了したら、Bluemix ポータルのダッシュボードのアプリ名 line-chatbot に、URLが表示されています。このアプリのURLをLINE developer の Message API の Webhook URLに設定して、Verify を実行して Success と表示されれば、準備完了です。
 
 
 
@@ -63,18 +63,18 @@ var bot = new LineMsgApi({
     }
 });
 ~~~
-必要なファイルをインストールします。
+* 必要なファイルをインストールします。
 
 ~~~
 npm install
 ~~~
-次にアプリをスタートさせます。
+* 次にアプリをスタートさせます。
 
 ~~~
 npm start
 ~~~
 
-LINE developer の Message API の Webhook URLに、仮想サーバーのドメイン名で https://ドメイン名:3000/webhock 登録して接続の確認を行います。Success と表示されれば、準備完了です。
+* LINE developer の Message API の Webhook URLに、仮想サーバーのドメイン名で https://ドメイン名:3000/webhock 登録して接続の確認を行います。Success と表示されれば、準備完了です。
 
 
 
