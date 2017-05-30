@@ -12,9 +12,9 @@ LINE メッセージAPIに接続して、メッセージをエコーするもの
 ## 仮想サーバーにデプロイする場合
 
 下記のファイルの４箇所を修正します。
-accessToken, channelSecret は、LINE BUSINESS CENTER (https://business.line.me/ja/)のMessaging API にアカウントを作成して、取得します。
+accessToken, channelSecret は、LINE BUSINESS CENTER https://business.line.me/ja/ Messaging API から取得します。
 暗号化通信するためのデジタル証明書とキーは、無料で取得できる Let's Encrypt (https://letsencrypt.jp/) も利用できます。 
-デジタル証明書を取得する前に、ドメイン名を取得しておく必要があります。そこで、このドメイン名を無料で取得するには、MyDNS.JP https://www.mydns.jp/ があります。
+デジタル証明書を取得する前に、ドメイン名を取得しておく必要があります。このドメイン名を無料で取得するには、MyDNS.JP https://www.mydns.jp/ があります。
 
 ~~~file:echoback_bot.js
 var bot = new LineMsgApi({
@@ -76,5 +76,7 @@ bx cf push
 コマンドが完了したら、Bluemix ポータルのダッシュボードのアプリ名 line-chatbot に、URLが表示されています。
 このURLをLINE developer の Message API の Webhook URLに、仮想サーバーのドメイン名で https://[BluemixのURL]/webhock 登録して接続の確認を行います。
 Success と表示されれば、準備完了です。
+
+
 
 
