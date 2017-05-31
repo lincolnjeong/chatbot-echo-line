@@ -10,21 +10,13 @@ git clone https://github.com/takara9/chatbot-echo-line
 ~~~
 
 * LINE BUSINESS CENTER から accessToken, channelSecret を取得して echoback_bot.js に設定します。参考資料(1)
-* HTTPSの暗号化通信は、 Bluemix のプラットフォームが変換するので echoback_bot.js から、これに関する部分を削除します。
+* HTTPSの暗号化通信は、 Bluemix のプラットフォームが変換するので credential.json から、これに関する部分を削除します。
 
 ~~~
-var portno = process.env.PORT || 3000;
-console.log("Listening on port ", portno);
-
-var bot = new LineMsgApi({
-    accessToken: 'Put here your access token',
-    channelSecret: 'Put here your channel secret',
-    server: {
-        port: portno,  <-- "," を削除
-	key:  'Put here the file name of encript.key',  <-- ここから２行を削除
-	cert: 'Put here the file name of encript_fullchain.crt'
-    }
-});
+{
+    "accessToken": "put here your access token",
+    "channelSecret": "put here your channel secret"
+}
 ~~~
 
 * Bluemix CLI コマンドをインストールして、Bluemix にログインします。 参考資料(2)
@@ -50,18 +42,18 @@ git clone https://github.com/takara9/chatbot-echo-line
 
 * この仮想サーバーは、HTTPSの暗号化 をサーバーのアプリに実装する必要があります。デジタル証明書取得のために、仮想サーバーのIPアドレスをドメイン名で参照できる様にします。参考資料(4)
 * HTTPS 通信のためのデジタル証明書を取得して、下記の key と cert にPEM形式のファイル名を設定します。 参考資料(5)
-* LINE の accessToken, channelSecret を取得して、echoback_bot.js の下記に部分に設定します。
+* LINE の accessToken, channelSecret を取得して、credential.json の下記に部分に設定します。
 
 ~~~
-var bot = new LineMsgApi({
-    accessToken: 'Put here your access token',
-    channelSecret: 'Put here your channel secret',
-    server: {
-        port: portno,
-	key:  'Put here the file name of encript.key',
-	cert: 'Put here the file name of encript_fullchain.crt'
+{
+    "accessToken": "put here your access token",
+    "channelSecret": "put here your channel secret",
+    "port": 3000, 
+    "https": {
+        "key":  "lets_encript.key",
+        "cert": "lets_encript_fullchain.crt"
     }
-});
+}
 ~~~
 * 必要なファイルをインストールします。
 
