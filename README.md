@@ -1,6 +1,6 @@
-# チャットボットのテンプレート LINE版
+# オウム返しするチャットボット LINE版
 
-これは LINE をクライアントとして、送信されたメッセージをオウム返しするもので、チャットボット開発のテンプレートとして作りました。
+LINEアプリから送信されたメッセージをオウム返しするもので、チャットボット開発のベースとして作りました。
 
 ## Bluemix CFアプリとしてデプロイする場合
 パソコンなど作業用の環境で以下のコマンドでファイルをダウンロードします。
@@ -8,8 +8,8 @@
 ~~~
 git clone https://github.com/takara9/chatbot-echo-line
 ~~~
-
-* LINE BUSINESS CENTER から accessToken, channelSecret を取得して echoback_bot.js に設定します。参考資料(1)
+* credential.json.sample を credential.json にリネームします。
+* LINE BUSINESS CENTER から accessToken, channelSecret を取得して credential.json に設定します。参考資料(1)
 * HTTPSの暗号化通信は、 Bluemix のプラットフォームが変換するので credential.json から、これに関する部分を削除します。
 
 ~~~
@@ -27,7 +27,7 @@ bx cf push
 ~~~
 
 * コマンドが完了したら、Bluemix ポータルのダッシュボードのアプリ名 line-chatbot に、URLが表示されています。このアプリのURLをLINE developer の Message API の Webhook URLに設定して、Verify を実行して Success と表示されれば、準備完了です。
-
+* LINEアプリからチャットボットへメッセージして、同じメッセージが受信できれば完了です。
 
 
 ## Bluemix Infrastructure の仮想サーバーにデプロイする場合
@@ -67,7 +67,7 @@ npm start
 ~~~
 
 * LINE developer の Message API の Webhook URLに、仮想サーバーのドメイン名で https://ドメイン名:3000/webhock 登録して接続の確認を行います。Success と表示されれば、準備完了です。
-
+* LINEアプリからチャットボットへメッセージして、同じメッセージが受信できれば完了です。
 
 
 
@@ -78,5 +78,4 @@ npm start
 - (4) 私的MyDNS.JP https://www.mydns.jp/
 - (5) Let's Encrypt 総合ポータル https://letsencrypt.jp/
 - (6) line-msg-api https://www.npmjs.com/package/line-msg-api
-
 
