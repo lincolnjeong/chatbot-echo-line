@@ -8,16 +8,8 @@ var LineMsgApi = require('line-msg-api');
 var portno = process.env.PORT || 3000;
 console.log("Listening on port ", portno);
 
-var bot = new LineMsgApi({
-    accessToken: 'Put here your access token',
-    channelSecret: 'Put here your channel secret',
-    server: {
-        port: portno,
-	key:  'Put here the file name of encript.key',
-	cert: 'Put here the file name of encript_fullchain.crt'
-    }
-});
-
+var cnf = require('./credential.json');
+var bot = new LineMsgApi(cnf);
 
 // Geting a message
 bot.on(function (msg) {
