@@ -7,8 +7,35 @@
 var LineMsgApi = require('line-msg-api');
 var cnf = require('./credentials.json');
 console.log("Listening on port ", process.env.PORT || cnf.port);
-
 var bot = new LineMsgApi(cnf);
+
+
+// ローカルVCAP設定と資格情報の読込み
+const cfenv = require("cfenv");
+var vcapLocal;
+try {
+    vcapLocal = require("./vcap-local.json");
+    console.log("Loaded local VCAP", vcapLocal);
+} catch (err) {
+    console.log(err.message);
+}
+const appEnvOpts = vcapLocal ? { vcap: vcapLocal} : {}
+const appEnv = cfenv.getAppEnv(appEnvOpts);
+
+
+// クラウダントへの接続とDB作成
+if (appEnv.services['cloudantNoSQLDB']) {
+  var Cloudant = require('cloudant');
+  var cloudant = Cloudant(appEnv.services['cloudantNoSQLDB'][0].credentials);
+  var dbName = 'sessionStore';
+  cloudant.db.create(dbName, function(err, data) {
+    if(!err) 
+      console.log("Created database: " + dbName);
+  });
+    mydb = cloudant.db.use(dbName);    
+}
+
+
 
 // Geting a message
 bot.on(function (msg) {

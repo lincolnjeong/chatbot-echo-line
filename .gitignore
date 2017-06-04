@@ -64,6 +64,8 @@ target/
 # for emacs
 *~
 
+# for Chatbot
 vcap-local.json
 credentials.json
-
+lets_encript*
+node_modules/

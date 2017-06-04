@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "node.js sample for LINE Message REST API ",
   "scripts": {
-    "start": "node ./echoback_bot.js"
+    "start": "node ./chatman.js"
   },
   "repository": {
     "type": "git",
@@ -22,13 +22,15 @@
   },
   "homepage": "https://github.com/takara9/line-msg-api#readme",
   "dependencies": {
-    "line-msg-api": "^1.0.17",
     "body-parser": "^1.15.2",
+    "cfenv": "^1.0.4",
+    "cloudant": "^1.8.0",
     "crypto": "0.0.3",
     "express": "^4.14.0",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "line-msg-api": "^1.0.17",
     "superagent": "^2.3.0"
   }
 }
