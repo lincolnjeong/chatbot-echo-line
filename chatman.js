@@ -6,7 +6,7 @@
 var LineMsgApi = require('line-msg-api');
 var cnf = require('./credentials.json');
 
-cnf.port = process.env.PORT || cnf.port;  // 要再考
+cnf.port = process.env.PORT || cnf.port;  
 console.log("Listening on port ", cnf.port);
 var bot = new LineMsgApi(cnf);
 var sc = require("./sessionCtrl.js");
@@ -45,9 +45,13 @@ function errorHandler(agent, message, errorMessage, err) {
 function _eventHandlerLine( message, session, callback) {
     if (message.events[0].message.type == 'text') {
 	session.inputMsg = message.events[0].message.text;
-	// エコーバック
+
+	// =========
+	// エコーバック （将来、ここに Watson API を組み込む)
 	bot.replyMessage(message.events[0].replyToken, session.inputMsg); 
+	// =========
 	callback(null, session);
+
     } else if (message.events[0].message.type == 'image') {
 	console.log("Image ----");
 	fpath = DOWNLOAD + "/" + message.events[0].message.id + ".jpg"
