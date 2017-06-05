@@ -3,7 +3,6 @@
 //  Smaple code 
 //    Author: Maho Takara
 //
-
 var LineMsgApi = require('line-msg-api');
 var cnf = require('./credentials.json');
 
@@ -40,15 +39,27 @@ if (appEnv.services['cloudantNoSQLDB']) {
 }
 
 
+// 放置されたセッションを削除する
+const SessionTimeOut  = 5*60; // 秒
+const PruningInterval = 60;   // 秒
+var timer = setTimeout( function() {
+    date = new Date();
+    sessionPruning(date.getTime() - 1000 * SessionTimeOut);
+}, 1000 * PruningInterval);
+
+
+
 // メッセージ受信
 bot.on(function (message) {
     userId = message.events[0].source.userId;
-    sessionCtrl( "LINE", userId, message, function(err, session) {
+    agent = "LINE"
+    sessionCtrl( agent, userId, message, function(err, session) {
 	if (err) {
-	    console.log("error: ", err)
+	    errorHandler(agent,message, "内部エラー", err);
 	}
     });
 });
+
 
 
 /*
@@ -59,52 +70,90 @@ function sessionCtrl(agent, userId, message, callback) {
     // ユーザーIDでセッションの存在をチェック
     dbSession.get(userId, function(err,session) {
 	if (err) {
-	    // 新規セッション
 	    if (err.error == 'not_found') {
+		// セッション開始
 		sessionOpen(agent, userId, message, function(err, session) {
 		    if (err) {
-			errorHandler(agent, message, "内部エラー セッション開始失敗");
-			callback(err,null);
+			callback(err, session);
+		    } else {
+			_sessionCtrl(session, message, function(err, session) {
+			    callback(err, session);
+			});
 		    }
-		    _sessionCtrl(session, message, function(err) {
-			callback(err,null);
-		    });
 		});
 	    } else {
-		errorHandler(agent, message, "内部エラー セッション検索失敗");
-		callback(err,null);
+		callback(err,session);
 	    }
 	} else {
-	    _sessionCtrl(session, message, function(err) {
-		callback(err,null);
+	    // セッション更新
+	    _sessionCtrl(session, message, function(err, session) {
+		callback(err, session);
 	    });
 	}
     });
 }
 
+
+// イベント処理の呼び出し
 function _sessionCtrl(session, message, callback) {
+
     time = null;
     session.count = session.count + 1;
     session.last_time = time;
+
     eventHandler(message, session, function(err,session) {
 	if (err) {
-	    errorHandler(session.agent, message, "内部エラー イベント処理");
-	    callback(err,null);
+	    callback(err, session);
 	} else {
 	    sessionUpdate(session, function(err,session) {
-		errorHandler(session.agent, message, "内部エラー セッション更新");
 		callback(err,session);
 	    });
 	}
     });			
 }
 
+// セッションの刈り取り
+var sessionPruning = function(timeout) {
+    query = {
+	"selector": {
+	    "last_unixTime": {
+		"$lt": timeout
+	    }
+	},
+	"fields": [
+	    "_id",
+	    "_rev",
+	    "session_id",
+	    "user_id",
+	    "last_unixTime"
+	]
+    }
+
+    dbSession.find(query,function(err, body) {
+	if (err) {
+	    throw err;
+	}
+	console.log("Hits:",body.docs.length);
+	for (var i = 0; i < body.docs.length; i++) {
+	    dbSession.destroy(body.docs[i]._id, body.docs[i]._rev);
+	}
+
+	date = new Date();
+	var timer = setTimeout( function() {
+	    sessionPruning(date.getTime() - 1000*SessionTimeOut);
+	},1000 * PruningInterval);
+    });
+
+};
+
 
 // 新規セッションの作成
-function sessionOpen(agent, userId, message, profile, callback) {
+function sessionOpen(agent, userId, message, callback) {
 
     var date;
     var reply;
+
+    console.log("セッション OPEN");
 
     if (agent == "LINE"){
 	date = new Date(message.events[0].timestamp);
@@ -125,40 +174,46 @@ function sessionOpen(agent, userId, message, profile, callback) {
 	count: 0,
 	reply_id: reply,
 	start_time: time,
-	last_time: time
+	last_time: time,
+	start_unixTime: date.getTime(),
+	last_unixTime: date.getTime()
     };
 
     // セッション登録
-    dbSession.insert(doc, userId, function(err, body, header) {
-	console.log("err = ", err);
-	callback(err,body);
+    dbSession.insert(doc, userId, function(err,res) {
+	// 要注意
+	doc._id = res.id;
+	doc._rev = res.rev;
+	callback(err,doc);
     });
+    
 }
 
 // セッション更新
 function sessionUpdate(session, callback) {
-    dbSession.insert(session, function(err, body, header) {
-	callback(err,body);
+    console.log("セッション UPDATE");
+    session.last_unixTime = date.getTime();
+    dbSession.insert(session,session.user_id, function(err, res) {
+	callback(err,res);
     });
-
 }
 
 // セッション終了
 function sessionClose(session, callback) {
+    console.log("セッション CLOSE");
     dbSession.get(session.user_id, function(err,session) {
-	if (!err) {
+	if (err) {
+	    callback(err,session);
+	} else {
 	    dbSession.destroy(session.user_id, session._rev, function(err, body, header) {
 		callback(err,body);
 	    });
-	} else {
-	    callback(err,null);
 	}
     });
 }
 
 // イベント処理 共通
 function eventHandler(message, session, callback) {
-    
     if (session.agent == "LINE") {
 	_eventHandlerLine( message, session, function(err,session) {
 	    callback(err,session);
@@ -168,7 +223,8 @@ function eventHandler(message, session, callback) {
 
 
 // エラー処理 共通
-function errorHandler(agent, message, errorMessage) {
+function errorHandler(agent, message, errorMessage, err) {
+    console.log("errorHandler message = ", errorMessage, err.message);
     if (agent == "LINE") {
 	bot.replyMessage(message.events[0].replyToken, errorMessage); 
     } 
