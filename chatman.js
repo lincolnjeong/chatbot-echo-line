@@ -6,7 +6,9 @@
 
 var LineMsgApi = require('line-msg-api');
 var cnf = require('./credentials.json');
-console.log("Listening on port ", process.env.PORT || cnf.port);
+
+cnf.port = process.env.PORT || cnf.port;  // 要再考
+console.log("Listening on port ", cnf.port);
 var bot = new LineMsgApi(cnf);
 
 

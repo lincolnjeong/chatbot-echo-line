@@ -67,5 +67,7 @@ target/
 # for Chatbot
 vcap-local.json
 credentials.json
+credentials.json.haru
+credentials.json.yuki
 lets_encript*
 node_modules/
