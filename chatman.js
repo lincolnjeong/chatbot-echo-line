@@ -19,7 +19,9 @@ bot.on(function (message) {
 	if (err) {
 	    errorHandler(agent,message, "内部エラー", err);
 	} else {
-	    eventHandler(message, session, function(err,session) {});
+	    eventHandler(message, session, function(err,session) {
+		sc.sessionUpdate(session, function(err,session) {});
+	    });
 	}
     });
 });
@@ -48,7 +50,8 @@ function _eventHandlerLine( message, session, callback) {
 
 	// =========
 	// エコーバック （将来、ここに Watson API を組み込む)
-	bot.replyMessage(message.events[0].replyToken, session.inputMsg); 
+	session.outputMsg = session.inputMsg;
+	bot.replyMessage(message.events[0].replyToken, session.outputMsg); 
 	// =========
 	callback(null, session);
 

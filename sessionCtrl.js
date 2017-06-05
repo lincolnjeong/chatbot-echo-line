@@ -72,34 +72,23 @@ var sessionPruning = function(timeout) {
 };
 
 
-/*
-  セッション管理
-　　複数の端末と同時並行で処理する
-*/
-exports.sessionCtrl = function(agent, userId, message, callback) {
 
+//  セッション管理
+//　　複数の端末と同時並行で処理する
+exports.sessionCtrl = function(agent, userId, message, callback) {
     // ユーザーIDでセッションの存在をチェック
     dbSession.get(userId, function(err,session) {
 	if (err) {
 	    if (err.error == 'not_found') {
 		// セッション開始
 		sessionOpen(agent, userId, message, function(err, session) {
-		    if (err) {
-			callback(err, session);
-		    } else {
-			_sessionCtrl(session, message, function(err, session) {
-			    callback(err, session);
-			});
-		    }
+		    callback(err, session);
 		});
 	    } else {
 		callback(err,session);
 	    }
 	} else {
-	    // セッション更新
-	    _sessionCtrl(session, message, function(err, session) {
-		callback(err, session);
-	    });
+	    callback(err, session);
 	}
     });
 }
@@ -167,6 +156,13 @@ function sessionUpdate(session, callback) {
 	callback(err,session);
     });
 }
+
+exports.sessionUpdate = function(session, callback) {
+    sessionUpdate(session,function(err,session) {
+	callback(err,session);
+    });
+}
+
 
 // セッション終了
 function sessionClose(session, callback) {
