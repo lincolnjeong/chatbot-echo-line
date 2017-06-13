@@ -15,7 +15,7 @@
 const cfenv = require("cfenv");
 var vcapLocal;
 try {
-    vcapLocal = require("../vcap-local.json");
+    vcapLocal = require("./vcap-local.json");
 } catch (err) {
     throw err;
 }

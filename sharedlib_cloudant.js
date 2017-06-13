@@ -10,14 +10,15 @@
 // 2016/8/15  初版
 // 2017/6/13  更新  VCAP対応とNLCのIDを登録
 //
-const appEnv = require("../sharedlib_vcap.js");
-const cloudant = require("../sharedlib_cloudant.js");
 
-var dbName = 'nlcid';
-cloudant.db.create(dbName, function(err, data) {
-    if(!err) 
-	console.log("Created database: " + dbName);
-});
-cdb = cloudant.db.use(dbName);    
+const appEnv = require("./sharedlib_vcap.js");
 
-module.exports = cdb;
+// クラウダントへの接続とDB作成
+var cloudant;
+if (appEnv.services['cloudantNoSQLDB']) {
+    var Cloudant = require('cloudant');
+    cloudant = Cloudant(appEnv.services['cloudantNoSQLDB'][0].credentials);
+}
+module.exports = cloudant;
+
+

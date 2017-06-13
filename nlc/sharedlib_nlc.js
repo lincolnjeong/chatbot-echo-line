@@ -11,7 +11,7 @@
 // 2017/6/13  更新  VCAP対応とNLCのIDを登録
 //
 
-const appEnv = require("./sharedlib_vcap.js");
+const appEnv = require("../sharedlib_vcap.js");
 
 // Watson NLC への接続 と NLC作成
 var nlc;

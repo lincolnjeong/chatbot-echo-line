@@ -28,19 +28,23 @@ for (var j = 0;j < classifier_id.length; j++) {
     var params = {
 	classifier_id: classifier_id[j]
     }
+
+    
     // Delete Cloudant
     cdb.get(classifier_id[j], function(err,data) {
-	if (err) throw err;
-	cdb.destroy(data._id, data._rev, function(err, body, header) {
-	    if (err) throw err;
-	    // Delete Watson nlc
-	    nlc.remove(params, function(err, status) {
-		if (err) throw err;
-		console.log("err = ", err);
-		console.log("destroy = ", classifier_id[j]);
+	if (!err) 
+	    cdb.destroy(data._id, data._rev, function(err, body, header) {
+		//if (err) throw err;
 	    });
-	});
     });
+
+    // Delete Watson nlc
+    nlc.remove(params, function(err, status) {
+	//if (err) throw err;
+	console.log("err = ", err);
+	console.log("destroy = ", classifier_id[j]);
+    });
+
 }
 
 
