@@ -6,6 +6,7 @@ applications:
   name: line-chatbot
   host: line-chatbot
   disk_quota: 1024M
-  services:
-   - Cloudant NoSQL DB-f1
+services:
+- Cloudant NoSQL DB-f1
+- Natural Language Classifier-mr
 
