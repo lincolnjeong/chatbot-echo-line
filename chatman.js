@@ -50,7 +50,8 @@ function _eventHandlerLine( message, session, callback) {
     if (message.events[0].message.type == 'text') {
 	session.inputMsg = message.events[0].message.text;
 	// Watson NLC をコールして応答を返す
-	wn.question_and_answer(session, function (err,session) {
+	//wn.messageClassifier(session, function (err,session) {
+	wn.messageReply(session, function (err,session) {
 	    bot.replyMessage(message.events[0].replyToken, session.outputMsg);
 	    callback(err, session);
 	});
