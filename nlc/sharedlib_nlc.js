@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 //
-// Watson NLCのインスタンスを作成する
+// Watson NLC と接続する
 //
 // 作者 Maho Takara    takara@jp.ibm.com
 //

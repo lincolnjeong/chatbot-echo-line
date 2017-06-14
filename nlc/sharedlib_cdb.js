@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 //
-// Watson NLCのインスタンスを作成する
+// Cloudant と接続して、データベースを指定する
 //
 // 作者 Maho Takara    takara@jp.ibm.com
 //

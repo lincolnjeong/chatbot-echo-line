@@ -3,7 +3,7 @@
 //    Author: Maho Takara
 //
 var uuid = require('uuid');
-const appEnv = require("./sharedlib_vcap.js");
+//const appEnv = require("./sharedlib_vcap.js");
 const cloudant = require("./sharedlib_cloudant.js");
 
 var dbName = 'session';

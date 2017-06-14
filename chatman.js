@@ -8,8 +8,10 @@ var cnf = require('./credentials.json');
 
 cnf.port = process.env.PORT || cnf.port;  
 console.log("Listening on port ", cnf.port);
+
 var bot = new LineMsgApi(cnf);
-var sc = require("./sessionCtrl.js");
+var sc = require("./sessionCtrl.js");  // セッション管理
+var wn = require("./watsonNlc.js");    // Watson NLC 
 
 // LINEメッセージ受信
 bot.on(function (message) {
@@ -47,13 +49,11 @@ function errorHandler(agent, message, errorMessage, err) {
 function _eventHandlerLine( message, session, callback) {
     if (message.events[0].message.type == 'text') {
 	session.inputMsg = message.events[0].message.text;
-
-	// =========
-	// エコーバック （将来、ここに Watson API を組み込む)
-	session.outputMsg = session.inputMsg;
-	bot.replyMessage(message.events[0].replyToken, session.outputMsg); 
-	// =========
-	callback(null, session);
+	// Watson NLC をコールして応答を返す
+	wn.question_and_answer(session, function (err,session) {
+	    bot.replyMessage(message.events[0].replyToken, session.outputMsg);
+	    callback(err, session);
+	});
 
     } else if (message.events[0].message.type == 'image') {
 	console.log("Image ----");
