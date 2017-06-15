@@ -1,16 +1,9 @@
 #!/usr/bin/env node
 //
+//
 // Watson NLCのインスタンスをテストする
-//   クラス判定するテキストは、本ファイルを編集する
 //
-// 作者 Maho Takara    takara@jp.ibm.com
 //
-// Copyright (C) 2016 International Business Machines Corporation 
-// and others. All Rights Reserved. 
-// 
-// 2016/8/15  初版
-//
-// ローカルVCAP設定と資格情報の読込み
 
 const nlc = require("./sharedlib_nlc.js");
 const cdb = require("./sharedlib_cdb.js");
@@ -20,7 +13,7 @@ if (process.argv.length != 3) {
     process.exit();
 }
 
-// テスト
+// テスト文を入力して判定
 var rl = require('readline');
 var rli = rl.createInterface(process.stdin, process.stdout);
 rli.setPrompt('NLC> ');

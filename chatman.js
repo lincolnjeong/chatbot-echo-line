@@ -11,7 +11,7 @@ console.log("Listening on port ", cnf.port);
 
 var bot = new LineMsgApi(cnf);
 var sc = require("./sessionCtrl.js");  // セッション管理
-var wn = require("./watsonNlc.js");    // Watson NLC 
+var wn = require("./watsonAPI.js");    // Watson API
 
 // LINEメッセージ受信
 bot.on(function (message) {
@@ -49,12 +49,13 @@ function errorHandler(agent, message, errorMessage, err) {
 function _eventHandlerLine( message, session, callback) {
     if (message.events[0].message.type == 'text') {
 	session.inputMsg = message.events[0].message.text;
-	// Watson NLC をコールして応答を返す
-	//wn.messageClassifier(session, function (err,session) {
+
+	// Watson API をコールして応答を返す
 	wn.messageReply(session, function (err,session) {
 	    bot.replyMessage(message.events[0].replyToken, session.outputMsg);
 	    callback(err, session);
 	});
+
 
     } else if (message.events[0].message.type == 'image') {
 	console.log("Image ----");
