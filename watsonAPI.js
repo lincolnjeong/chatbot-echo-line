@@ -24,11 +24,17 @@ exports.messageReply = function(session, callback) {
 		session.outputMsg = "(分類結果:" + resp.classes[0].class_name;
 		session.confidence = parseInt(resp.classes[0].confidence * 100);
 		session.outputMsg = session.outputMsg + " 確信度=" + session.confidence + "％)"
-		// 応答取得
-		getReplyMsg(resp.classes[0].class_name, function(err,rsp) {
-		    session.outputMsg = rsp + "\n" + session.outputMsg;
+		// 確信度が低い場合の対応
+		if (session.confidence < 60) {
+		    session.outputMsg = "わかりません" + "\n" + session.outputMsg;
 		    callback(null,session);
-		});
+		} else {
+		    // 応答取得
+		    getReplyMsg(resp.classes[0].class_name, function(err,rsp) {
+			session.outputMsg = rsp + "\n" + session.outputMsg;
+			callback(null,session);
+		    });
+		}
 	    }
 	});
     });

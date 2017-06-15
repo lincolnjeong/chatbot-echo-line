@@ -32,6 +32,7 @@
     "https": "^1.0.0",
     "line-msg-api": "^1.0.17",
     "superagent": "^2.3.0",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "watson-developer-cloud": "^2.32.1"
   }
 }
