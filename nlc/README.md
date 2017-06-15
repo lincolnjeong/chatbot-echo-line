@@ -94,3 +94,19 @@ NLC> こんばんは
 
 
 
+## 分類器のIDセット
+
+アプリで分類器を複数利用するケースを想定して、アプリが利用する分類器のIDをDBへセットします。
+これは、Cloudant の nlcid のデータベースに、キー **current_classifier_id** で保存されます。
+
+使用例 セットまたは更新
+
+~~~
+./nlc_set_classifier_id.js set 67a480x203-nlc-21924
+~~~
+使用例 削除
+
+~~~
+./nlc_set_classifier_id.js del
+~~~
+
