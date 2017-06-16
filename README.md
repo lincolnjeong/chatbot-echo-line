@@ -3,7 +3,7 @@
 Bluemix の CFアプリ または Bluemix IaaS で動作する LINE チャットボットです。 Watson NLC を利用して受信メッセ
 ージをクラス分類して、適切なメッセージを返す振る舞いをします。
 
-Bluemix の Watson NLC と Cloudant のサービスと接続する方法は、Qiitaの「Watson チャットボットの作り方 第３回目」https://qiita.com/MahoTakara/private/28dee5ed8d4e02e5ab04 を参照ねがいます。また、NLCのトレーニングデータと応答用の
+Bluemix の Watson NLC と Cloudant のサービスと接続する方法は、Qiitaの [Watson チャットボットの作り方 第３回目](https://qiita.com/MahoTakara/private/28dee5ed8d4e02e5ab04) を参照ねがいます。また、NLCのトレーニングデータと応答用の
 データ、及び、ツールは https://github.com/takara9/chatbot-corpus にあります。
 
 
