@@ -1,7 +1,11 @@
-# オウム返しするチャットボット LINE版 セッション管理追加
+# チャットボット LINE NLC版
 
-LINEアプリから送信されたメッセージをオウム返しするもので、チャットボット開発のベースとして作りました。
-複数のユーザーと同時並行に対話するために、セッション管理を実装したもので、セッション管理のために Cloudant を利用しています。
+Bluemix の CFアプリ または Bluemix IaaS で動作する LINE チャットボットです。 Watson NLC を利用して受信メッセ
+ージをクラス分類して、適切なメッセージを返す振る舞いをします。
+
+Bluemix の Watson NLC と Cloudant のサービスと接続する方法は、Qiitの[Watson チャットボットの作り方 第３回目](htt
+p://qiita.com/MahoTakara/private/28dee5ed8d4e02e5ab04)を参照ねがいます。また、NLCのトレーニングデータと応答用の
+データ、及び、ツールは https://github.com/takara9/chatbot-corpus にあります。
 
 
 ## Bluemix CFアプリとしてデプロイする場合
